@@ -1,30 +1,33 @@
 import request from "request";
-// const url =
-//     "https://api.weatherstack.com/current?access_key=327b057d334d347f589105dc7b282d0a&query=37.8367,-122.4233&units=f";
+import { getCoordinates } from "./src/utils/geoCoding.js";
+import { weatherStackApi } from "./src/utils/weatherStackApi.js";
 
-// request({ url: url, json: true }, (errorMessage, response) => {
-//     // const data = JSON.parse(response.body);
-//     console.log(
-//         response.body.current.weather_descriptions +
-//         ". is is currently ",
-//         response.body.current.temperature + 'F',
-//         "Feels Like",
-//         response.body.current.feelslike
-//     );
+// const address = "Pakistan";
+// getCoordinates(address, (error, userLocationDetails) => {
+//     if (error) {
+//         console.log(error);
+//     } else {
+//         console.log("Coordinates:", userLocationDetails);
+//         console.log(
+//             `Your Current Location => ${userLocationDetails.placeName},
+//              Latitude: ${userLocationDetails?.latitude},
+//              Longitude: ${userLocationDetails?.longitude}`
+//         );
+//     }
 // });
 
-const weatherApiUrl =
-    "https://api.mapbox.com/geocoding/v5/mapbox.places/Market%20Street%20&%20Fremont%20Street.json?types=address&proximity=-122.39738575285674,37.7925147111369453&access_token=pk.eyJ1IjoiaGFtaWRhYmR1bGxhaCIsImEiOiJjbTM1dmVhd3kwZnFiMmpwcmQ1aWZueGxiIn0.VA3uHq-3vhFzMmJgid2xpQ";
-
-request({ url: weatherApiUrl, json: true }, (weatherApiError, response) => {
-    if (weatherApiError) {
-        console.error("Error fetching weather data:", weatherApiError);
+const location = { latitude: 37.8367, longitude: -122.4233 };
+weatherStackApi(location, (error, data) => {
+    if (error) {
+        console.log({ Weather_Stack_Api_Error: error });
         return;
     }
 
-    const coordinates = response?.body?.features?.[0]?.geometry?.coordinates;
-    const [longitude, latitude] = coordinates;
-    console.log({ coordinates: coordinates });
-    console.log(`Your Latitude = ${latitude}, Longitude = ${longitude}`);
-
+    console.log({
+        Weather_Stack_Api_Response: {
+            description: data.description,
+            temperature: `${data.temperature}°F`,
+            feelslike: `${data.feelslike}°F`
+        }
+    });
 });
