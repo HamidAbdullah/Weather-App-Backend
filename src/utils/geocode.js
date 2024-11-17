@@ -12,9 +12,10 @@ function getCoordinates(address, callback) {
             callback("Unable to find location", null);
         } else {
             const coordinates = response.body.features[0].geometry.coordinates;
-            const placeName = response.body.features[0].place_name;
+            const location = response.body.features[0].place_name;
             const [longitude, latitude] = coordinates;
-            callback(null, { latitude, longitude, placeName });
+            console.log({ placeName: location })
+            callback(null, { latitude, longitude, location });
         }
     });
 }

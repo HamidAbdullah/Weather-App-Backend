@@ -46,6 +46,7 @@ app.get('/help', (req, res) => {
 
 // Weather route that handles user input for the address query
 app.get('/weather', (req, res) => {
+    console.log({ req: req, res: res })
     if (!req.query.address) {
         return res.render('error', {
             title: 'Error',
@@ -60,6 +61,8 @@ app.get('/weather', (req, res) => {
                 message: error  // Show geocode error
             });
         }
+
+        console.log({ "App.js": latitude, location: location, latitude: latitude })
 
         forecast(latitude, longitude, (error, forecastData) => {
             if (error) {
